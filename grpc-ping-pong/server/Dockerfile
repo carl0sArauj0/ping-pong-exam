@@ -1,12 +1,14 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+# Copiamos todo el proyecto (incluyendo la carpeta proto y go.mod)
 COPY . .
-RUN go build -o server-exe ./server/main.go
+RUN go mod download
+# Entramos a la carpeta del servidor para compilar
+WORKDIR /app/server
+RUN go build -o /server-exe main.go
 
 FROM alpine:latest
 WORKDIR /root/
-COPY --from=builder /app/server-exe .
+COPY --from=builder /server-exe .
 EXPOSE 50051
 CMD ["./server-exe"]

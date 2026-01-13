@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package ping;
 
-// Define la ruta de salida para Go
+
 option go_package = "./proto";
 
 service PingService {
